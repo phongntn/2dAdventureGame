@@ -2,14 +2,18 @@ package entity;
 
 import main.GamePanel;
 
+import java.util.Random;
+
 public class NPC_OldMan extends Entity{
     public NPC_OldMan(GamePanel gp){
         super(gp);
         direction = "down";
         speed = 1;
+
+        getImage();
     }
 
-    public void getPlayerImage() {
+    public void getImage() {
         up1 = setup("/npc/oldman_up_1");
         up2 = setup("/npc/oldman_up_2");
         down1 = setup("/npc/oldman_down_1");
@@ -18,5 +22,31 @@ public class NPC_OldMan extends Entity{
         right2 = setup("/npc/oldman_right_2");
         left1 = setup("/npc/oldman_left_1");
         left2 = setup("/npc/oldman_left_2");
+    }
+
+    public void setAction(){
+
+        actionLockCounter++;
+
+        if(actionLockCounter == 120){
+            Random random = new Random();
+            int i = random.nextInt(100) + 1; // chon 1 so tu 1 - 100
+
+            if(i <= 25){
+                direction = "up";
+            }
+            else if(i <= 50){
+                direction = "down";
+            }
+            else if(i <= 75){
+                direction = "left";
+            }
+            else{
+                direction = "right";
+            }
+
+            actionLockCounter = 0;
+        }
+
     }
 }

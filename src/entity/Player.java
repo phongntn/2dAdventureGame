@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import static java.lang.Math.sqrt;
+import static java.lang.Math.toRadians;
 
 public class Player extends Entity {
     KeyHandler keyH;
@@ -51,10 +52,10 @@ public class Player extends Entity {
         up2 = setup("/player/boy_up_2");
         down1 = setup("/player/boy_down_1");
         down2 = setup("/player/boy_down_2");
-        right1 = setup("/player/boy_up_1");
-        right2 = setup("/npc/oldman_right_2");
-        left1 = setup("/npc/oldman_left_1");
-        left2 = setup("/npc/oldman_left_2");
+        right1 = setup("/player/boy_right_1");
+        right2 = setup("/player/boy_right_2");
+        left1 = setup("/player/boy_left_1");
+        left2 = setup("/player/boy_left_2");
     }
 
     public void update() {
@@ -115,9 +116,11 @@ public class Player extends Entity {
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true){
             if(keyH.upPressed == true){
                 direction = "up";
+                spriteDirection = "up";
             }
             else if(keyH.downPressed == true){
                 direction = "down";
+                spriteDirection = "down";
             }
             else if(keyH.leftPressed == true){
                 direction = "left";
@@ -135,6 +138,12 @@ public class Player extends Entity {
             int objIndex =  gp.cChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
+            //Check npc collision
+            int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+            interactNPC(npcIndex);
+
+
+            //If collision is false, player can move
             if(collisionOn == false){
                 switch(direction){
                     case "up" :
@@ -150,6 +159,24 @@ public class Player extends Entity {
                         worldX += speed;
                         break;
                 }
+            }
+
+            spriteCounter++;
+            if(spriteCounter > 10){
+                if(spriteNum == 1){
+                    spriteNum = 2;
+                }
+                else if(spriteNum == 2){
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
+        }
+        else{
+            standCounter++;
+            if(standCounter == 20){
+                spriteNum = 1;
+                standCounter = 0;
             }
         }
     }
@@ -194,14 +221,48 @@ public class Player extends Entity {
         }
     }
 
+    public void interactNPC(int i){
+        if(i != 999){
+            System.out.println("You are hitting an npc!");
+        }
+    }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
 
-        if (spriteDirection.equals("left")) {
-            image = left;
-        }
-        else if (spriteDirection.equals("right")) {
-            image = right;
+        switch (direction){
+            case "up":
+                if(spriteNum == 1){
+                    image = up1;
+                }
+                if(spriteNum == 2){
+                    image = up2;
+                }
+                break;
+            case "down":
+                if(spriteNum == 1){
+                    image = down1;
+                }
+                if(spriteNum == 2){
+                    image = down2;
+                }
+                break;
+            case "left":
+                if(spriteNum == 1){
+                    image = left1;
+                }
+                if(spriteNum == 2){
+                    image = left2;
+                }
+                break;
+            case "right":
+                if(spriteNum == 1){
+                    image = right1;
+                }
+                if(spriteNum == 2){
+                    image = right2;
+                }
+                break;
         }
         g2.drawImage(image, screenX, screenY,null);
     }
