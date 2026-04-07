@@ -128,24 +128,18 @@ public class KeyHandler implements KeyListener {
                 }
             }
         }
-
         //Pause state
         else if(gp.gameState == gp.pauseState){
             if (code == KeyEvent.VK_P) {
                 gp.gameState = gp.playState;
             }
         }
-
         //Dialogue state
         else if(gp.gameState == gp.dialogueState){
             if(code == KeyEvent.VK_ENTER){
                 gp.gameState = gp.playState;
             }
         }
-    }
-
-    private void extracted() {
-        upPressed = true;
     }
 
     @Override

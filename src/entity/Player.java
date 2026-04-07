@@ -146,6 +146,9 @@ public class Player extends Entity {
             int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
 
+            //Check event
+            gp.eHandler.checkEvent();
+
 
             //If collision is false, player can move
             if(collisionOn == false){
@@ -174,13 +177,6 @@ public class Player extends Entity {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
-            }
-        }
-        else{
-            standCounter++;
-            if(standCounter == 20){
-                spriteNum = 1;
-                standCounter = 0;
             }
         }
     }
