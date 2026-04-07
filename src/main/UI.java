@@ -1,7 +1,9 @@
 package main;
 
 import object.OBJ_Chest;
+import object.OBJ_Heart;
 import object.OBJ_Key;
+import object.SuperObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,6 +18,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica, purisaB;
+    BufferedImage heart_full, heart_half, heart_blank;
 //    BufferedImage keyImage;
     public boolean messageOn = false;
     public String message = "";
@@ -42,6 +45,12 @@ public class UI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Create hud object
+        SuperObject heart = new OBJ_Heart(gp);
+        heart_full = heart.image;
+        heart_half = heart.image2;
+        heart_blank = heart.image3;
     }
 
     public void showMessage(String text){
@@ -118,16 +127,49 @@ public class UI {
 
         //Play state
         if(gp.gameState == gp.playState){
-
+            drawPlayerLife();
         }
         //Pause state
         if(gp.gameState == gp.pauseState){
+            drawPlayerLife();
             drawPauseScreen();
         }
 
         //Dialogue state
         if(gp.gameState == gp.dialogueState){
+            drawPlayerLife();
             drawDialogueScreen();
+        }
+    }
+
+    public void drawPlayerLife(){
+        gp.player.life = 2;
+
+        int x = gp.tileSize / 2;
+        int y = gp.tileSize / 2;
+        int i = 0;
+
+        //Draw blank heart
+        while(i < gp.player.maxLife / 2){
+            g2.drawImage(heart_blank, x, y, null);
+            i++;
+            x += gp.tileSize;
+        }
+
+        //Reset
+        x = gp.tileSize / 2;
+        y = gp.tileSize / 2;
+        i = 0;
+
+        //Draw current life
+        while(i < gp.player.life){
+            g2.drawImage(heart_half, x, y, null);
+            i++;
+            if(i < gp.player.life){
+                g2.drawImage(heart_full, x, y, null);
+            }
+            i++;
+            x += gp.tileSize;
         }
     }
 
@@ -148,7 +190,7 @@ public class UI {
 
             //Title name
             g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60F));
-            String text = "Frieren: Beyond Journey's End";
+            String text = "Phong sech ngu nguc";
             int x = getXforCenteredText(text);
             int y = gp.tileSize * 3;
 
